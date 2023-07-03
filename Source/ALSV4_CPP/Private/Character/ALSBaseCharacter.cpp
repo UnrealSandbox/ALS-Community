@@ -21,13 +21,13 @@
 
 
 const FName NAME_FP_Camera(TEXT("FP_Camera"));
-const FName NAME_Pelvis(TEXT("Pelvis"));
+const FName NAME_Pelvis(TEXT("hip"));
 const FName NAME_RagdollPose(TEXT("RagdollPose"));
 const FName NAME_RotationAmount(TEXT("RotationAmount"));
 const FName NAME_YawOffset(TEXT("YawOffset"));
-const FName NAME_pelvis(TEXT("pelvis"));
+const FName NAME_pelvis(TEXT("hip"));
 const FName NAME_root(TEXT("root"));
-const FName NAME_spine_03(TEXT("spine_03"));
+const FName NAME_spine_03(TEXT("chestLower"));
 
 
 AALSBaseCharacter::AALSBaseCharacter(const FObjectInitializer& ObjectInitializer)
@@ -161,6 +161,7 @@ void AALSBaseCharacter::RagdollStart()
 		DefVisBasedTickOp = GetMesh()->VisibilityBasedAnimTickOption;
 		GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
 	}
+
 	TargetRagdollLocation = GetMesh()->GetSocketLocation(NAME_Pelvis);
 	ServerRagdollPull = 0;
 
@@ -407,7 +408,11 @@ void AALSBaseCharacter::EventOnLanded()
 
 	if (bRagdollOnLand && VelZ > RagdollOnLandVelocity)
 	{
-		ReplicatedRagdollStart();
+		//if (TestAnim11) {
+		//	Replicated_PlayMontage(TestAnim11, 1.35);
+		//}
+		
+		//ReplicatedRagdollStart();
 	}
 	else if (bBreakfallOnLand && bHasMovementInput && VelZ >= BreakfallOnLandVelocity)
 	{
@@ -418,8 +423,7 @@ void AALSBaseCharacter::EventOnLanded()
 		GetCharacterMovement()->BrakingFrictionFactor = bHasMovementInput ? 0.5f : 3.0f;
 
 		// After 0.5 secs, reset braking friction factor to zero
-		GetWorldTimerManager().SetTimer(OnLandedFrictionResetTimer, this,
-		                                &AALSBaseCharacter::OnLandFrictionReset, 0.5f, false);
+		GetWorldTimerManager().SetTimer(OnLandedFrictionResetTimer, this, &AALSBaseCharacter::OnLandFrictionReset, 0.5f, false);
 	}
 }
 
