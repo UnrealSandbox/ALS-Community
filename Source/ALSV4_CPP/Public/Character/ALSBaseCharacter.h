@@ -350,6 +350,9 @@ public:
 protected:
 	/** Ragdoll System */
 
+	UFUNCTION()
+	void OnSleep(UPrimitiveComponent* SleepingComponent, FName BoneName);
+
 	void RagdollUpdate(float DeltaTime);
 
 	void SetActorLocationDuringRagdoll(float DeltaTime);

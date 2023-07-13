@@ -83,6 +83,12 @@ void AALSBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (MovementModel.DataTable == nullptr) {
+		return;
+	}
+
+	GetMesh()->OnComponentSleep.AddDynamic(this, &AALSBaseCharacter::OnSleep);
+
 	// If we're in networked game, disable curved movement
 	bEnableNetworkOptimizations = !IsNetMode(NM_Standalone);
 
@@ -95,12 +101,9 @@ void AALSBaseCharacter::BeginPlay()
 	// Force update states to use the initial desired values.
 	ForceUpdateCharacterState();
 
-	if (Stance == EALSStance::Standing)
-	{
+	if (Stance == EALSStance::Standing) {
 		UnCrouch();
-	}
-	else if (Stance == EALSStance::Crouching)
-	{
+	} else if (Stance == EALSStance::Crouching) {
 		Crouch();
 	}
 
@@ -109,14 +112,17 @@ void AALSBaseCharacter::BeginPlay()
 	LastVelocityRotation = TargetRotation;
 	LastMovementInputRotation = TargetRotation;
 
-	if (GetMesh()->GetAnimInstance() && GetLocalRole() == ROLE_SimulatedProxy)
-	{
+	if (GetMesh()->GetAnimInstance() && GetLocalRole() == ROLE_SimulatedProxy) {
 		GetMesh()->GetAnimInstance()->SetRootMotionMode(ERootMotionMode::IgnoreRootMotion);
 	}
 
 	MyCharacterMovementComponent->SetMovementSettings(GetTargetMovementSettings());
 
 	ALSDebugComponent = FindComponentByClass<UALSDebugComponent>();
+}
+
+void AALSBaseCharacter::OnSleep(UPrimitiveComponent* SleepingComponent, FName BoneName) {
+	UE_LOG(LogTemp, Log, TEXT("OnSleep: %s"), BoneName);
 }
 
 void AALSBaseCharacter::Tick(float DeltaTime)
@@ -499,8 +505,7 @@ void AALSBaseCharacter::SetActorLocationAndTargetRotation(FVector NewLocation, F
 void AALSBaseCharacter::SetMovementModel()
 {
 	const FString ContextString = GetFullName();
-	FALSMovementStateSettings* OutRow =
-		MovementModel.DataTable->FindRow<FALSMovementStateSettings>(MovementModel.RowName, ContextString);
+	FALSMovementStateSettings* OutRow =	MovementModel.DataTable->FindRow<FALSMovementStateSettings>(MovementModel.RowName, ContextString);
 	check(OutRow);
 	MovementData = *OutRow;
 }
