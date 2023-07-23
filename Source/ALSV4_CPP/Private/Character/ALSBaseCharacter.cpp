@@ -123,6 +123,10 @@ void AALSBaseCharacter::BeginPlay()
 
 void AALSBaseCharacter::OnSleep(UPrimitiveComponent* SleepingComponent, FName BoneName) {
 	UE_LOG(LogTemp, Log, TEXT("OnSleep: %s"), BoneName);
+
+	//GetMesh()->SetCollisionObjectType(ECC_Pawn);
+	//GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	//GetMesh()->SetAllBodiesSimulatePhysics(false);
 }
 
 void AALSBaseCharacter::Tick(float DeltaTime)
@@ -402,30 +406,23 @@ void AALSBaseCharacter::SetGroundedEntryState(EALSGroundedEntryState NewState)
 	GroundedEntryState = NewState;
 }
 
-
 void AALSBaseCharacter::Server_SetOverlayState_Implementation(EALSOverlayState NewState, bool bForce)
 {
 	SetOverlayState(NewState, bForce);
 }
 
-void AALSBaseCharacter::EventOnLanded()
-{
+void AALSBaseCharacter::OnFallDamage(float Velocity) {
+
+}
+
+void AALSBaseCharacter::EventOnLanded() {
 	const float VelZ = FMath::Abs(GetCharacterMovement()->Velocity.Z);
 
-	if (bRagdollOnLand && VelZ > RagdollOnLandVelocity)
-	{
-		//if (TestAnim11) {
-		//	Replicated_PlayMontage(TestAnim11, 1.35);
-		//}
-		
-		//ReplicatedRagdollStart();
-	}
-	else if (bBreakfallOnLand && bHasMovementInput && VelZ >= BreakfallOnLandVelocity)
-	{
+	if (bRagdollOnLand && VelZ > RagdollOnLandVelocity) {
+		OnFallDamage(VelZ);
+	} else if (bBreakfallOnLand && bHasMovementInput && VelZ >= BreakfallOnLandVelocity) {
 		OnBreakfall();
-	}
-	else
-	{
+	} else {
 		GetCharacterMovement()->BrakingFrictionFactor = bHasMovementInput ? 0.5f : 3.0f;
 
 		// After 0.5 secs, reset braking friction factor to zero

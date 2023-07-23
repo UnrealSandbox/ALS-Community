@@ -26,3 +26,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AnimNotify)
 	EALSGroundedEntryState GroundedEntryState = EALSGroundedEntryState::None;
 };
+
+
+UCLASS()
+class ALSV4_CPP_API UALSAnimNotifyRagdollStart : public UAnimNotify {
+	GENERATED_BODY()
+
+	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
+
+	virtual FString GetNotifyName_Implementation() const override;
+};

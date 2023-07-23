@@ -24,3 +24,18 @@ FString UALSAnimNotifyGroundedEntryState::GetNotifyName_Implementation() const
 	Name.Append(GetEnumerationToString(GroundedEntryState));
 	return Name;
 }
+
+
+void UALSAnimNotifyRagdollStart::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) {
+	Super::Notify(MeshComp, Animation, EventReference);
+
+	AALSBaseCharacter* Character = Cast<AALSBaseCharacter>(MeshComp->GetOwner());
+	if (Character) {
+		Character->ReplicatedRagdollStart();
+	}
+}
+
+FString UALSAnimNotifyRagdollStart::GetNotifyName_Implementation() const {
+	FString Name(TEXT("RagdollStart"));
+	return Name;
+}

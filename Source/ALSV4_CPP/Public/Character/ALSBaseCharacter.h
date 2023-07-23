@@ -139,6 +139,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ALS|Character States")
 	void EventOnLanded();
 
+	virtual void OnFallDamage(float Velocity);
+
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category = "ALS|Character States")
 	void Multicast_OnLanded();
 
