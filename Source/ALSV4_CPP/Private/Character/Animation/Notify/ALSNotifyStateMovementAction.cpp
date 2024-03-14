@@ -38,3 +38,26 @@ FString UALSNotifyStateMovementAction::GetNotifyName_Implementation() const
 	Name.Append(GetEnumerationToString(MovementAction));
 	return Name;
 }
+
+//==============================================================================================================================
+
+
+void UALSNotifySetCanMove::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference) {
+	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
+
+	AALSBaseCharacter* BaseCharacter = Cast<AALSBaseCharacter>(MeshComp->GetOwner());
+	if (BaseCharacter) {
+		BaseCharacter->bBlockMove = false;
+	}
+
+}
+
+void UALSNotifySetCanMove::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) {
+	Super::NotifyEnd(MeshComp, Animation, EventReference);
+
+
+}
+
+FString UALSNotifySetCanMove::GetNotifyName_Implementation() const {
+	return TEXT("Set Can Move");
+}

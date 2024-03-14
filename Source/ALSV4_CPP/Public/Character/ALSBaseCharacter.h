@@ -349,6 +349,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
 	void LookingDirectionAction();
 
+	bool bBlockMove = false;
+
 protected:
 	/** Ragdoll System */
 

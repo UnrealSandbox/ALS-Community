@@ -30,3 +30,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AnimNotify)
 	EALSMovementAction MovementAction = EALSMovementAction::None;
 };
+
+
+UCLASS()
+class ALSV4_CPP_API UALSNotifySetCanMove : public UAnimNotifyState {
+	GENERATED_BODY()
+
+	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference) override;
+
+	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
+
+	virtual FString GetNotifyName_Implementation() const override;
+
+public:
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AnimNotify)
+	//EALSMovementAction MovementAction = EALSMovementAction::None;
+
+};

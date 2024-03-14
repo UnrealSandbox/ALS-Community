@@ -206,6 +206,9 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "ALS|Movement System")
 	bool GettingUp_ = false;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "ALS|Movement System")
+	bool Attack_ = false;
+
 public:
 	FALSMovementAction()
 	{
@@ -218,6 +221,7 @@ public:
 	const bool& HighMantle() const { return HighMantle_; }
 	const bool& Rolling() const { return Rolling_; }
 	const bool& GettingUp() const { return GettingUp_; }
+	const bool& Attack() const { return Attack_; }
 
 	operator EALSMovementAction() const { return Action; }
 
@@ -229,6 +233,7 @@ public:
 		HighMantle_ = Action == EALSMovementAction::HighMantle;
 		Rolling_ = Action == EALSMovementAction::Rolling;
 		GettingUp_ = Action == EALSMovementAction::GettingUp;
+		Attack_ = Action == EALSMovementAction::GettingUp;
 	}
 };
 
